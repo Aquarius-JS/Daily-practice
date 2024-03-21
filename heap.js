@@ -32,3 +32,4 @@ heap.prototype.up = function (index) {
 };
 
 console.log(new heap([5, 2, 3, 4, 5, 6]).down(1));
+console.log(new heap([5, 2, 3, 4, 5, 6]).up(2));

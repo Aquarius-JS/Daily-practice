@@ -54,8 +54,6 @@ myPromise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
 
-export { myPromise };
-
 const test = new myPromise((res, rej) => {
   setTimeout(() => {
     res("test");

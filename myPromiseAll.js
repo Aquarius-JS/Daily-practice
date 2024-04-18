@@ -1,10 +1,10 @@
 function PromiseAll(promiseArr) {
-  if (!Array.isArray(promises)) {
-    return reject(new TypeError("Argument must be an array"));
-  }
   return new Promise((resolve, reject) => {
+    if (!Array.isArray(promiseArr)) {
+      return reject(new TypeError("Argument must be an array"));
+    }
     const result = [];
-    const successCount = 0;
+    let successCount = 0;
     for (let i = 0; i < promiseArr.length; i++) {
       Promise.resolve(promiseArr[i])
         .then((val) => {
@@ -18,3 +18,19 @@ function PromiseAll(promiseArr) {
     }
   });
 }
+
+PromiseAll([1, Promise.resolve("1"), Promise.reject("err")])
+  .then((val) => {
+    console.log(val);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+  
+PromiseAll([1, Promise.resolve("1"), Promise.resolve("err")])
+  .then((val) => {
+    console.log(val);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

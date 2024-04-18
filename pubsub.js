@@ -17,8 +17,8 @@ const bus = new pubsub();
 bus.on("test", () => {
   console.log(1);
 });
-bus.on("test", () => {
-  console.log(2);
+bus.on("test", (a, b) => {
+  console.log(2, a, b);
 });
 
-bus.emit("test");
+bus.emit("test", "3", "4");

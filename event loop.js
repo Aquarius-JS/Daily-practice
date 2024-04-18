@@ -5,7 +5,7 @@ function delay(time) {
 
 setTimeout(() => {
   console.log("time out");
-}, 2000);
+}, 0);
 // 创建XMLHttpRequest对象
 const xhr = new XMLHttpRequest();
 

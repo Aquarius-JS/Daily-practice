@@ -46,6 +46,8 @@ myPromise.prototype.then = function (onFulfilled, onRejected) {
     } else if (this.state === _REJECTED_ && onRejected) {
       const result = onRejected(this.err);
       reject(result);
+    } else if (this.state === _REJECTED_ && !onRejected) {
+      reject(this.err);
     }
   });
 };
@@ -54,13 +56,34 @@ myPromise.prototype.catch = function (onRejected) {
   return this.then(null, onRejected);
 };
 
-const test = new myPromise((res, rej) => {
-  setTimeout(() => {
-    res("test");
-  }, 4000);
-}).then((val) => {
-  console.log(val);
-});
-setTimeout(() => {
-  console.log(test);
-}, 5000);
+myPromise.resolve = function (val) {
+  if (val instanceof myPromise) return val;
+  //TODO
+  // 如果 value 是一个对象或函数，并且具有 .then 方法（即 thenable 对象）
+  if (
+    val &&
+    (typeof val === "object" || typeof val === "function") &&
+    typeof val.then === "function"
+  ) {
+    return new Promise((resolve, reject) => {
+      val.then(resolve, reject);
+    });
+  }
+  return new myPromise((res) => res(val));
+};
+
+myPromise.reject = function (val) {
+  return new myPromise((_resolve, reject) => {
+    reject(val);
+  });
+};
+
+myPromise
+  .resolve(1)
+  .then((val) => {
+    console.log(val, "!!!");
+  })
+  .then(() => {})
+  .catch((err) => {
+    console.log(err, "1111");
+  });

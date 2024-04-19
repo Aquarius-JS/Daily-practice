@@ -37,7 +37,7 @@ myPromise.prototype.then = function (onFulfilled, onRejected) {
         resolve(result);
       });
       this.onRejectedList.push(() => {
-        const result = onRejected ? onRejected(this.err) : null;
+        const result = onRejected ? onRejected(this.err) : this.err;
         reject(result);
       });
     } else if (this.state === _FULFILLED_ && onFulfilled) {

@@ -81,7 +81,7 @@ myPromise.reject = function (val) {
 myPromise.all = function (promises) {
   const list = [];
   let success = 0;
-  new myPromise((resolve, reject) => {
+  return new myPromise((resolve, reject) => {
     if (!Array.isArray(promises)) {
       reject(new TypeError("Argument must be an array"));
     }
@@ -116,6 +116,23 @@ myPromise.race = function (promises) {
     });
   });
 };
+
+/**
+ * 测试all, race
+ */
+myPromise
+  .all([
+    1,
+    myPromise.resolve("12"),
+    new myPromise((res, rej) => {
+      setTimeout(() => {
+        res(3);
+      }, 3000);
+    }),
+  ])
+  .then((array) => {
+    console.log(array);
+  });
 
 /**
  * 测试延迟rejected

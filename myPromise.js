@@ -78,6 +78,45 @@ myPromise.reject = function (val) {
   });
 };
 
+myPromise.all = function (promises) {
+  const list = [];
+  let success = 0;
+  new myPromise((resolve, reject) => {
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("Argument must be an array"));
+    }
+    for (let i = 0; i < promises.length; i++) {
+      myPromise
+        .resolve(promises[i])
+        .then((val) => {
+          list[i] = myPromise.resolve(val);
+          if (++success === promises.length) resolve(list);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }
+  });
+};
+
+myPromise.race = function (promises) {
+  return new myPromise((resolve, reject) => {
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("Argument must be an array"));
+    }
+    promises.forEach((promise) => {
+      promise.then(
+        (val) => {
+          resolve(val);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+};
+
 /**
  * 测试延迟rejected
  */

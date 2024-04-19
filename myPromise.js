@@ -33,7 +33,7 @@ myPromise.prototype.then = function (onFulfilled, onRejected) {
   return new myPromise((resolve, reject) => {
     if (this.state === _PENDING_) {
       this.onFulfilledList.push(() => {
-        const result = onFulfilled(this.val);
+        const result = onFulfilled(this.val) ?? null;
         resolve(result);
       });
       this.onRejectedList.push(() => {
@@ -53,7 +53,7 @@ myPromise.prototype.then = function (onFulfilled, onRejected) {
 };
 
 myPromise.prototype.catch = function (onRejected) {
-  return this.then(null, onRejected);
+  return this.then(() => {}, onRejected);
 };
 
 myPromise.resolve = function (val) {
@@ -78,8 +78,14 @@ myPromise.reject = function (val) {
   });
 };
 
-myPromise
-  .resolve(1)
+/**
+ * 测试延迟rejected
+ */
+new myPromise((res, rej) => {
+  setTimeout(() => {
+    res("test");
+  }, 1000);
+})
   .then((val) => {
     console.log(val, "!!!");
   })

@@ -83,7 +83,7 @@ myPromise.reject = function (val) {
  */
 new myPromise((res, rej) => {
   setTimeout(() => {
-    res("test");
+    rej("test");
   }, 1000);
 })
   .then((val) => {

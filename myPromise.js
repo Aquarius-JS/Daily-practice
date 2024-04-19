@@ -65,7 +65,7 @@ myPromise.resolve = function (val) {
     (typeof val === "object" || typeof val === "function") &&
     typeof val.then === "function"
   ) {
-    return new Promise((resolve, reject) => {
+    return new myPromise((resolve, reject) => {
       val.then(resolve, reject);
     });
   }
@@ -89,7 +89,7 @@ myPromise.all = function (promises) {
       myPromise
         .resolve(promises[i])
         .then((val) => {
-          list[i] = myPromise.resolve(val);
+          list[i] = val;
           if (++success === promises.length) resolve(list);
         })
         .catch((err) => {
@@ -105,7 +105,7 @@ myPromise.race = function (promises) {
       reject(new TypeError("Argument must be an array"));
     }
     promises.forEach((promise) => {
-      promise.then(
+      myPromise.resolve(promise).then(
         (val) => {
           resolve(val);
         },

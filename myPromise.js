@@ -2,105 +2,150 @@ const _PENDING_ = "pending";
 const _FULFILLED_ = "fulfilled";
 const _REJECTED_ = "rejected";
 
-function MyPromise(execute) {
-	this.state = _PENDING_;
-	this.val = null;
-	this.err = null;
-	this.onFulfilledList = [];
-	this.onRejectedList = [];
-	this.resolve;
-	const _resolve = val => {
-		if ((this.state = _PENDING_)) {
-			this.val = val;
-			this.state = _FULFILLED_;
-			this.onFulfilledList.forEach(cb => cb());
-		}
-	};
-	const _reject = err => {
-		if ((this.state = _PENDING_)) {
-			this.err = err;
-			this.state = _REJECTED_;
-			this.onRejectedList.forEach(cb => cb());
-		}
-	};
-	try {
-		execute(_resolve, _reject);
-	} catch (err) {
-		_reject(err);
-	}
+function myPromise(executor) {
+  this.state = _PENDING_;
+  this.val = null;
+  this.err = null;
+  this.onFulfilledList = [];
+  this.onRejectedList = [];
+  const resolve = (val) => {
+    if (this.state === _PENDING_) {
+      this.val = val;
+      this.state = _FULFILLED_;
+      this.onFulfilledList.forEach((cb) => cb());
+    }
+  };
+  const reject = (err) => {
+    if (this.state === _PENDING_) {
+      this.err = err;
+      this.state = _REJECTED_;
+      this.onRejectedList.forEach((cb) => cb());
+    }
+  };
+  try {
+    executor(resolve, reject);
+  } catch (error) {
+    reject(error);
+  }
 }
 
-MyPromise.prototype.then = function (onFulfilled, onRejected) {
-	return new MyPromise((resolve, reject) => {
-		if (this.state === _PENDING_) {
-			this.onFulfilledList.push(() => {
-				const result = onFulfilled(this.val) ?? null;
-				resolve(result);
-			});
-			this.onRejectedList.push(() => {
-				const result = onRejected ? onRejected(this.err) : this.err;
-				reject(result);
-			});
-		} else if (this.state === _FULFILLED_) {
-			resolve(onFulfilled(this.val));
-		} else if (this.state === _REJECTED_ && onRejected) {
-			//promise then rejeced得到的是一个 resolve 的promise
-			resolve(onRejected(this.err));
-		} else if (this.state === _REJECTED_ && !onRejected) {
-			reject(this.err);
-		}
-	});
+myPromise.prototype.then = function (onFulfilled, onRejected) {
+  return new myPromise((resolve, reject) => {
+    if (this.state === _PENDING_) {
+      this.onFulfilledList.push(() => {
+        const result = onFulfilled(this.val) ?? null;
+        resolve(result);
+      });
+      this.onRejectedList.push(() => {
+        const result = onRejected ? onRejected(this.err) : this.err;
+        reject(result);
+      });
+    } else if (this.state === _FULFILLED_ && onFulfilled) {
+      const result = onFulfilled(this.val);
+      resolve(result);
+    } else if (this.state === _REJECTED_ && onRejected) {
+      const result = onRejected(this.err);
+      reject(result);
+    } else if (this.state === _REJECTED_ && !onRejected) {
+      reject(this.err);
+    }
+  });
 };
 
-MyPromise.prototype.catch = function (onRejected) {
-	return this.then(() => {}, onRejected(this.err));
+myPromise.prototype.catch = function (onRejected) {
+  return this.then(() => {}, onRejected);
 };
 
-MyPromise.resolve = (val)=>{
-	
-}
-
-MyPromise.all = promises => {
-	return new MyPromise((resolve, reject) => {
-		const arr = [];
-		const sum = 0;
-		for (let i = 0; i < promises.length; i++) {
-			MyPromise.resolve(promises[i])
-				.then(val => {
-					arr[i] = val;
-					if (++sum === promises.length) {
-						resolve(arr);
-					}
-				})
-				.catch(err => {
-					reject(err);
-				});
-		}
-	});
+myPromise.resolve = function (val) {
+  if (val instanceof myPromise) return val;
+  //TODO
+  // 如果 value 是一个对象或函数，并且具有 .then 方法（即 thenable 对象）
+  if (
+    val &&
+    (typeof val === "object" || typeof val === "function") &&
+    typeof val.then === "function"
+  ) {
+    return new myPromise((resolve, reject) => {
+      val.then(resolve, reject);
+    });
+  }
+  return new myPromise((res) => res(val));
 };
 
-MyPromise.race = promises => {
-	return new MyPromise((resolve, reject) => {
-		promises.forEach(promise => {
-			MyPromise.resolve(promise)
-				.then(val => {
-					resolve(val);
-				})
-				.catch(err => {
-					reject(err);
-				});
-		});
-	});
+myPromise.reject = function (val) {
+  return new myPromise((_resolve, reject) => {
+    reject(val);
+  });
 };
 
-const p = Promise.reject("2")
-	.catch(er => {
-		return er;
-	})
-	.then(val => {
-		console.log(val);
-	});
+myPromise.all = function (promises) {
+  const list = [];
+  let success = 0;
+  return new myPromise((resolve, reject) => {
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("Argument must be an array"));
+    }
+    for (let i = 0; i < promises.length; i++) {
+      myPromise
+        .resolve(promises[i])
+        .then((val) => {
+          list[i] = val;
+          if (++success === promises.length) resolve(list);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    }
+  });
+};
 
-setTimeout(() => {
-	console.log(p);
-}, 1000);
+myPromise.race = function (promises) {
+  return new myPromise((resolve, reject) => {
+    if (!Array.isArray(promises)) {
+      reject(new TypeError("Argument must be an array"));
+    }
+    promises.forEach((promise) => {
+      myPromise.resolve(promise).then(
+        (val) => {
+          resolve(val);
+        },
+        (err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+};
+
+/**
+ * 测试all, race
+ */
+myPromise
+  .all([
+    1,
+    myPromise.resolve("12"),
+    new myPromise((res, rej) => {
+      setTimeout(() => {
+        res(3);
+      }, 3000);
+    }),
+  ])
+  .then((array) => {
+    console.log(array);
+  });
+
+/**
+ * 测试延迟rejected
+ */
+new myPromise((res, rej) => {
+  setTimeout(() => {
+    rej("test");
+  }, 1000);
+})
+  .then((val) => {
+    console.log(val, "!!!");
+  })
+  .then(() => {})
+  .catch((err) => {
+    console.log(err, "1111");
+  });

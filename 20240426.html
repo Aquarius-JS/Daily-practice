@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">
+        <div class="item2"></div>
+      </div>
+    </div>
+    <p>
+      非根元素来讲，包含块还有一种可能，那就是如果 position 属性是 absolute 或
+      fixed，包含块也可能是由满足以下条件的最近父级元素的内边距区的边缘组成的：
+      transform 或 perspective 的值不是 none will-change 的值是 transform 或
+      perspective filter 的值不是 none 或 will-change 的值是 filter(只在 Firefox
+      下生效). contain 的值是 paint (例如: contain: paint;)
+    </p>
+    <style>
+      .container {
+        width: 300px;
+        height: 300px;
+        position: relative;
+        background-color: aquamarine;
+      }
+      .item {
+        width: 200px;
+        height: 200px;
+        margin-left: 50px;
+        border: 2px solid black;
+        /* 改变了item2的包含块 */
+        transform: translate(0, 0);
+      }
+      .item2 {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        background-color: red;
+      }
+    </style>
+  </body>
+</html>

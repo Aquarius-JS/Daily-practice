@@ -1,2 +1,4 @@
-# myLodash
-我的简单的lodash
+# practice daily
+我的日常
+
+##leetcode,js,html,css

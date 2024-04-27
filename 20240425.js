@@ -3,11 +3,11 @@
  */
 
 Function.prototype.a = () => {
-	console.log("1");
+  console.log('1');
 };
 
 Object.prototype.b = () => {
-	console.log("2");
+  console.log('2');
 };
 
 function Fn() {}
@@ -29,48 +29,48 @@ Fn.b();
 
 var val = 1;
 function foo() {
-	console.log(val);
+  console.log(val);
 }
 
 function bar() {
-	var val = 2;
-	foo();
+  var val = 2;
+  foo();
 }
 bar();
 // 1
 
 for (var i = 0; i < 10; i++) {
-	setTimeout(() => {
-		(function (i) {
-			console.log(i);
-		})(i);
-	}, 1000);
+  setTimeout(() => {
+    (function (i) {
+      console.log(i);
+    })(i);
+  }, 1000);
 }
 
 for (var i = 0; i < 10; i++) {
-	setTimeout(() => {
-		(function () {
-			console.log(i);
-		})(i);
-	}, 1000);
+  setTimeout(() => {
+    (function () {
+      console.log(i);
+    })(i);
+  }, 1000);
 }
 for (var i = 0; i < 10; i++) {
-	(function (i) {
-		setTimeout(() => {
-			console.log(i);
-		}, 100);
-	})(i);
+  (function (i) {
+    setTimeout(() => {
+      console.log(i);
+    }, 100);
+  })(i);
 }
 /**
  * this
  */
 
 const shape = {
-	radis: 10,
-	diameter() {
-		return this.radis * 2;
-	},
-	perimeter: () => 2 * Math.PI * this.radis,
+  radis: 10,
+  diameter() {
+    return this.radis * 2;
+  },
+  perimeter: () => 2 * Math.PI * this.radis,
 };
 
 console.log(shape.diameter());

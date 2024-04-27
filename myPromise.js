@@ -1,6 +1,6 @@
-const _PENDING_ = "pending";
-const _FULFILLED_ = "fulfilled";
-const _REJECTED_ = "rejected";
+const _PENDING_ = 'pending';
+const _FULFILLED_ = 'fulfilled';
+const _REJECTED_ = 'rejected';
 
 function myPromise(executor) {
   this.state = _PENDING_;
@@ -8,18 +8,18 @@ function myPromise(executor) {
   this.err = null;
   this.onFulfilledList = [];
   this.onRejectedList = [];
-  const resolve = (val) => {
+  const resolve = val => {
     if (this.state === _PENDING_) {
       this.val = val;
       this.state = _FULFILLED_;
-      this.onFulfilledList.forEach((cb) => cb());
+      this.onFulfilledList.forEach(cb => cb());
     }
   };
-  const reject = (err) => {
+  const reject = err => {
     if (this.state === _PENDING_) {
       this.err = err;
       this.state = _REJECTED_;
-      this.onRejectedList.forEach((cb) => cb());
+      this.onRejectedList.forEach(cb => cb());
     }
   };
   try {
@@ -62,14 +62,14 @@ myPromise.resolve = function (val) {
   // 如果 value 是一个对象或函数，并且具有 .then 方法（即 thenable 对象）
   if (
     val &&
-    (typeof val === "object" || typeof val === "function") &&
-    typeof val.then === "function"
+    (typeof val === 'object' || typeof val === 'function') &&
+    typeof val.then === 'function'
   ) {
     return new myPromise((resolve, reject) => {
       val.then(resolve, reject);
     });
   }
-  return new myPromise((res) => res(val));
+  return new myPromise(res => res(val));
 };
 
 myPromise.reject = function (val) {
@@ -83,16 +83,16 @@ myPromise.all = function (promises) {
   let success = 0;
   return new myPromise((resolve, reject) => {
     if (!Array.isArray(promises)) {
-      reject(new TypeError("Argument must be an array"));
+      reject(new TypeError('Argument must be an array'));
     }
     for (let i = 0; i < promises.length; i++) {
       myPromise
         .resolve(promises[i])
-        .then((val) => {
+        .then(val => {
           list[i] = val;
           if (++success === promises.length) resolve(list);
         })
-        .catch((err) => {
+        .catch(err => {
           reject(err);
         });
     }
@@ -102,14 +102,14 @@ myPromise.all = function (promises) {
 myPromise.race = function (promises) {
   return new myPromise((resolve, reject) => {
     if (!Array.isArray(promises)) {
-      reject(new TypeError("Argument must be an array"));
+      reject(new TypeError('Argument must be an array'));
     }
-    promises.forEach((promise) => {
+    promises.forEach(promise => {
       myPromise.resolve(promise).then(
-        (val) => {
+        val => {
           resolve(val);
         },
-        (err) => {
+        err => {
           reject(err);
         }
       );
@@ -123,14 +123,14 @@ myPromise.race = function (promises) {
 myPromise
   .all([
     1,
-    myPromise.resolve("12"),
+    myPromise.resolve('12'),
     new myPromise((res, rej) => {
       setTimeout(() => {
         res(3);
       }, 3000);
     }),
   ])
-  .then((array) => {
+  .then(array => {
     console.log(array);
   });
 
@@ -139,13 +139,13 @@ myPromise
  */
 new myPromise((res, rej) => {
   setTimeout(() => {
-    rej("test");
+    rej('test');
   }, 1000);
 })
-  .then((val) => {
-    console.log(val, "!!!");
+  .then(val => {
+    console.log(val, '!!!');
   })
   .then(() => {})
-  .catch((err) => {
-    console.log(err, "1111");
+  .catch(err => {
+    console.log(err, '1111');
   });

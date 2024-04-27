@@ -1,7 +1,7 @@
 const targetMap = new WeakMap();
 
 function isObject(val) {
-    return val !== null && typeof val === 'object';
+  return val !== null && typeof val === 'object';
 }
 
 // 依赖收集函数
@@ -25,7 +25,7 @@ function trigger(target, key) {
   if (depsMap) {
     const dep = depsMap.get(key);
     if (dep) {
-      dep.forEach((effect) => effect());
+      dep.forEach(effect => effect());
     }
   }
 }
@@ -60,13 +60,13 @@ function effect(fn) {
   activeEffect = null;
 }
 
-const obj = reactive({ state: "1", test: { name: "张三" } });
+const obj = reactive({ state: '1', test: { name: '张三' } });
 effect(() => {
-  console.log(obj.state, "@@@");
+  console.log(obj.state, '@@@');
 });
 effect(() => {
-  console.log(obj.test.name, "$$$");
+  console.log(obj.test.name, '$$$');
 });
 
 obj.state = 2;
-obj.test.name = "李四";
+obj.test.name = '李四';

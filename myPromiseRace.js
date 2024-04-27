@@ -1,14 +1,14 @@
 function MyPromiseRace(promises) {
   return new Promise((resolve, reject) => {
     if (!Array.isArray(promises)) {
-      return reject(new TypeError("Argument must be an array"));
+      return reject(new TypeError('Argument must be an array'));
     }
-    promises.forEach((promise) => {
+    promises.forEach(promise => {
       Promise.resolve(promise)
-        .then((val) => {
+        .then(val => {
           resolve(val);
         })
-        .catch((err) => {
+        .catch(err => {
           reject(err);
         });
     });

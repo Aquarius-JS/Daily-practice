@@ -11,10 +11,8 @@ const heap = function (arr) {
 heap.prototype.down = function (index) {
   const _l_ = this.arr.length;
   let temp = index;
-  if (index * 2 <= _l_ && this.arr[index] > this.arr[index * 2])
-    temp = index * 2;
-  if (index * 2 + 1 <= _l_ && this.arr[temp] > this.arr[index * 2 + 1])
-    temp = index * 2 + 1;
+  if (index * 2 <= _l_ && this.arr[index] > this.arr[index * 2]) temp = index * 2;
+  if (index * 2 + 1 <= _l_ && this.arr[temp] > this.arr[index * 2 + 1]) temp = index * 2 + 1;
   if (temp !== index) {
     [this.arr[index], this.arr[temp]] = [this.arr[temp], this.arr[index]];
     this.down(temp);

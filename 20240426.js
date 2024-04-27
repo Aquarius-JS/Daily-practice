@@ -2,13 +2,13 @@
  * promise
  */
 
-new Promise((resolve) => {
+new Promise(resolve => {
   setTimeout(() => {
     resolve();
   }, 1000);
 }).then(() => {
-  console.log("1");
+  console.log('1');
 });
 setTimeout(() => {
-  console.log("@");
+  console.log('@');
 }, 1000);

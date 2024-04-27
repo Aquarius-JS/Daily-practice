@@ -3,8 +3,8 @@ async function fn1() {
     setTimeout(() => {
       resolve(1);
     }, 1000);
-  }).then(()=>{
-    console.log("2")
+  }).then(() => {
+    console.log('2');
   });
 }
 

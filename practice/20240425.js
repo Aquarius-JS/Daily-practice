@@ -38,7 +38,9 @@ function bar() {
 }
 bar();
 // 1
-
+/**
+ * js函数执行为传值调用(call by value)，对比传名调用(call by name)
+ */
 for (var i = 0; i < 10; i++) {
   setTimeout(() => {
     (function (i) {

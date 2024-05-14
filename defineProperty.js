@@ -10,11 +10,6 @@ Object.defineProperty(obj, 'a', {
   configurable: true,
 });
 
-Object.defineProperty(obj, 'b', {
-  get: function () {
-    return 'test';
-  },
-  set:function(val) {
-    
-  }
-});
+for (let i in obj) {
+  console.log(obj[i]);
+}

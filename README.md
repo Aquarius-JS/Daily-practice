@@ -2,4 +2,4 @@
 
 ## 我的日常
 
-leetcode,js,html,css
+leetcode,js,html,css,lodash

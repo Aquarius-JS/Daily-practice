@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
+		/>
+
+		<title>题目</title>
+		<style>
+			.container {
+				width: 500px;
+				height: 300px;
+				overflow-y: auto;
+				padding: 10px;
+				background-color: #eee;
+			}
+
+			.container img {
+				width: 400px;
+				height: 200px;
+				display: block;
+				margin: 20px auto;
+				border: 1px solid #eee;
+				border-radius: 16px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div class="container">
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977103756/40E5FD3EDDC8F069C403C44E8706A49D"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977108368/701BC31183B90F9B1EF8F6F547B15241"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977112183/BE1B361A179B334766CF4726D5C384FF"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977116090/BA59D92D87F1EB22700D4B61D575CD4C"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977119734/350FA018A370918FE50F54A89095CC31"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977123045/ECE3EFE60C9D5C5AC6BE5171AB094AD0"
+				/>
+				<img
+					src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKAQMAAAC3/F3+AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjwAsAAB4AAdpxxYoAAAAASUVORK5CYII="
+					data-src="https://uploadfiles.nowcoder.com/images/20231219/644558031_1702977127519/EDC7425E5F8B6201E8576290F41E4BB7"
+				/>
+			</div>
+		</div>
+
+		<script>
+			const images = document.querySelectorAll(".container img");
+			lazy(images);
+
+			function lazy(el) {
+				let els = Array.isArray(el) || el.length ? [...el] : [el];
+				const io = new IntersectionObserver(entries => {
+					entries.forEach(entry => {
+						// 补全代码：判断当前监听的元素是否在视口范围，在视口范围找到该元素，并改变img的src属性值，同时将该元素从监听中删除。不在视口范围不做任何处理。
+						if (entry.isIntersecting) {
+							entry.target["src"] = entry.target.dataset.src;
+						}
+					});
+				});
+				els.forEach(el => io.observe(el));
+				return cancel;
+
+				function cancel(el) {
+					if (!io) return;
+					if (el) return io.unobserve(el);
+					els.forEach(el => io.unobserve(el));
+					io.disconnect();
+				}
+			}
+		</script>
+	</body>
+</html>

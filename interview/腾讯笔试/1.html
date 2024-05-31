@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            color: #fff;
+        }
+
+        .circle {
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            /*------补全代码：设置circle为一个圆，使用border-radius------*/
+            border-radius:50%;
+            background: black;
+        }
+
+        .circle-center {
+            /*-------补全代码：使circle-center位于盒子中间--------*/
+            transform: translate(0,40px);
+        }
+
+        .circle-bottom {
+            /*-------补全代码：使circle-bottom位于盒子下边--------*/
+            transform: translate(-100%,80px);
+        }
+
+        .circle-bottom-left {
+            /*-------补全代码：使circle-bottom-left平移至左边--------*/
+            transform: translate(-100%,80px);
+        }
+
+        .circle-bottom-right {
+            /*-------补全代码：使circle-bottom-right平移至右边--------*/
+            transform: translate(100%,80px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="circle">1</div>
+        <div class="circle circle-bottom circle-bottom-left">2</div>
+        <div class="circle circle-center">3</div>
+        <div class="circle circle-bottom circle-bottom-right">4</div>
+        <div class="circle">5</div>
+    </div>
+</body>
+
+</html>

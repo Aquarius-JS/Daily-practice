@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+
+	<body>
+		<script>
+			function create(transformers) {
+				return function (template, ...args) {
+					let idx = 0;
+					let state = "UNDEFINED";
+					console.log(args);
+
+					return template.replace(
+						/([{}])\1|[{](.*?)(?:!(.+?))?[}]/g,
+						function (match, literal, key, xf) {
+							console.log(match, literal, key, xf, "@@@");
+							if (literal != null) {
+								return literal;
+							}
+							if (key.length > 0) {
+								if (state === "IMPLICIT") {
+									throw ValueError(
+										"cannot switch from implicit to explicit numbering"
+									);
+								}
+								state = "EXPLICIT";
+							} else {
+								if (state === "EXPLICIT") {
+									throw ValueError(
+										"cannot switch from explicit to implicit numbering"
+									);
+								}
+								state = "IMPLICIT";
+								key = String(idx);
+								idx += 1;
+							}
+
+							// 补全代码: 根据占位符的 key 和 args 数组中的值，获取相应的 value
+							// 提示：使用 key 和 args 数组来获取正确的 value
+							let _value;
+							if (key.includes(".")) {
+								key = key.split(".");
+								_value = key.reduce((_value, k) => _value[k], args);
+							} else {
+								_value = args[key];
+							}
+
+							if (xf == null) {
+								// 补全代码: 如果没有转换器 xf，返回获取到的 value
+								return _value;
+							} else if (transformers.hasOwnProperty(xf)) {
+								// 补全代码: 如果存在名为 xf 的转换器，将其应用于 value，并返回转换后的结果
+								// 提示：使用 transformers 对象来查找和应用转换器
+								return transformers[xf](_value);
+							} else {
+								throw ValueError(`no transformer named "${xf}"`);
+							}
+						}
+					);
+				};
+			}
+			function ValueError(message) {
+				var err = new Error(message);
+				err.name = "ValueError";
+				return err;
+			}
+			// const transformers = {
+			// 	uppercase: function (value) {
+			// 		return value.toUpperCase();
+			// 	},
+			// 	lowercase: function (value) {
+			// 		return value.toLowserCase();
+			// 	},
+			// };
+			// const format = create({});
+			// const user = {
+			// 	name: "Join",
+			// 	age: 30,
+			// 	address: {
+			// 		city: "New York",
+			// 		country: "USA",
+			// 	},
+			// };
+			// const result = format("Hello, {0.name}! MyName is {0.age}!, {0.address.city}", user);
+			// console.log(result);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>按钮</button>
+    <script>
+      function getElement(ele) {
+        const ans = {};
+        Object.defineProperty(ans, 'waitClick', {
+          get() {
+            return new Promise(res => {
+              document.querySelector(ele).addEventListener('click', () => {
+                res();
+              });
+            });
+          },
+        });
+        return ans;
+      }
+      (async () => {
+        const btn = getElement('button');
+        while (1) {
+          await btn.waitClick;
+          console.log('click');
+        }
+      })();
+    </script>
+  </body>
+</html>

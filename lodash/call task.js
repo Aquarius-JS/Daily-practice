@@ -5,7 +5,7 @@ async function cb() {
         }, 3000)
     })
     console.log(1)
-    cb()
+    await cb()
     // return 2
 }
 const res = await cb()

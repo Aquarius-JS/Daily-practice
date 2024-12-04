@@ -87,7 +87,7 @@
         }
       }
 
-      const MyComponent = new Component({
+      const sfc = {
         template: `
           <div class="my-component">
             <div class="container">
@@ -146,7 +146,9 @@
           }
         `,
         rootId: 'root', // Specify the ID for the root element
-      });
+      };
+      
+      const MyComponent = new Component(sfc);
 
       // Ensure CSS is applied to the component
       const style = document.createElement('style');

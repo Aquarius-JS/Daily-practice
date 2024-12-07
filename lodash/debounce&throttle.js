@@ -30,3 +30,25 @@ function throttle(func, delay) {
     }
   };
 }
+
+
+function deb(fun, time) {
+  let t = null
+  return function (...args) {
+    clearTimeout(t)
+    t = setTimeout(() => {
+      fun().apply(this, args)
+    }, time)
+  }
+}
+
+function t(fun, time) {
+  let last = 0;
+  return function (...args) {
+    let now = new Date().getTime();
+    if ((now - last) > time) {
+      fun.apply(this, args)
+      last = now
+    }
+  }
+}

@@ -54,3 +54,18 @@ function* myAsync() {
 
 RunAsync(myAsync()).then(console.log);
 //1 success test 2 12 3
+
+(() => {
+  try {
+    new Promise((res, rej) => {
+      setTimeout(() => {
+        rej()
+      }, 1000)
+    }).catch(err => {
+      console.log('err')
+    })
+  } catch (e) {
+    console.log("111")
+  }
+  console.log("1")
+})()

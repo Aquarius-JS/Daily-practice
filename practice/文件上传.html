@@ -8,9 +8,12 @@
   <body>
     <div class="box"></div>
     <input type="file" multiple />
+    <br />
+    <button class="upload" onclick="upload()">上传</button>
     <script>
+      let abPro = null;
+      let files = [];
       const box = document.querySelector('.box');
-      console.log(box);
       box.ondragenter = e => {
         e.preventDefault();
       };
@@ -19,6 +22,24 @@
       };
       box.ondrop = e => {
         e.preventDefault();
+      };
+      const input = document.querySelector('input');
+      input.onchange = e => {
+        files = e.target.files;
+        console.log(files);
+        const reader = new FileReader();
+        reader.onload = e => {};
+        reader.readAsDataURL(files[0]);
+      };
+
+      upload = () => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          const resp = JSON.parse(xhr.responseText);
+          console.log(resp);
+        };
+        xhr.open('POST', 'http://localhost:8080/upload');
+        xhr.send(files[0]);
       };
     </script>
     <style>

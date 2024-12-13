@@ -1,14 +1,30 @@
 const express = require('express');
 const cors = require('cors')
-const app = express()
+const multer = require('multer');
+const bodyParser = require('body-parser')
+const saveFile = require('./saveFile')
 
+const app = express();
 app.use(cors())
 
-// app.all()
-app.post('/upload', function (req, res) {
-    res.send('ok')
+const upload = multer() // for parsing multipart/form-data
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.raw({ type: 'application/*', limit: 10000000 }))
+app.use('/upload', express.static(path.join(__dirname, 'upload')))
+
+app.post('/upload', upload.array(), (req, res, next) => {
+    const fileName = saveFile(req)
+    res.send(JSON.stringify({ fileName }))
+    next()
 })
 
-app.listen(8080, () => {
-    console.log('8080...')
+app.post('/hello', (req, res) => {
+    res.send(JSON.stringify({ hello: "hello" }))
 })
+
+const port = 8080;
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});

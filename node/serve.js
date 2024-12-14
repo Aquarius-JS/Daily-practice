@@ -3,6 +3,7 @@ const cors = require('cors')
 const multer = require('multer');
 const bodyParser = require('body-parser')
 const saveFile = require('./saveFile')
+const path = require('path')
 
 const app = express();
 app.use(cors())
@@ -16,8 +17,7 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')))
 
 app.post('/upload', upload.array(), (req, res, next) => {
     const fileName = saveFile(req)
-    res.send(JSON.stringify({ fileName }))
-    next()
+    res.json(JSON.stringify({ fileName }))
 })
 
 app.post('/hello', (req, res) => {

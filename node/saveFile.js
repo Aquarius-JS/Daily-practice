@@ -10,20 +10,19 @@ const randomName = function (length) {
     return result;
 }
 
-function saveFile(req) {
+async function saveFile(req) {
     const buffer = req.body
     const fileType = req.headers['content-type'].split('/')[1]
     const fileName = `${randomName(10)}.${fileType}`
     const filePath = `${__dirname}/upload/${fileName}`
-    fs.writeFile(filePath, buffer, (err) => {
-        if (err) {
-            console.error('写入文件时发生错误:', err);
-            return err
-        }
-        console.log('文件已被保存');
-    });
-    return fileName
-
+    return new Promise((resolve, reject) => {
+        fs.writeFile(filePath, buffer, (err) => {
+            if (err) {
+                reject(err)
+            }
+            resolve(fileName)
+        });
+    })
 }
 
 module.exports = saveFile

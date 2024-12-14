@@ -9,7 +9,8 @@
     <div class="box"></div>
     <input type="file" multiple />
     <br />
-    <button class="upload" onclick="upload()">上传</button>
+    <button class="upload" onclick="upload('http://localhost:8080/upload',files[0],onProgess, onFinish)">上传</button>
+    <div class="progess"></div>
     <script>
       let abPro = null;
       let files = [];
@@ -32,17 +33,25 @@
         reader.readAsDataURL(files[0]);
       };
 
-      upload = () => {
+      upload = (url,file,onProgress, onFinish) => {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:8080/upload',true);
-        // xhr.open('POST', 'http://localhost:8080/hello',true);
+        xhr.open('POST', url,true);
 
         xhr.onload = () => {
-          const resp = JSON.parse(xhr.responseText);
-          console.log(resp);
+          const result = JSON.parse(xhr.responseText);
+          onFinish(result)
         };
-        xhr.send(files[0]);
+        xhr.upload.onprogress = (e) =>{
+          onProgress(e)
+        }
+        xhr.send(file);
       };
+      onProgess = (e) =>{
+        console.log(e)
+      }
+      onFinish = (result) =>{
+        console.log(result)
+      }
     </script>
     <style>
       .box {

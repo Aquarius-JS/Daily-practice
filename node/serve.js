@@ -12,11 +12,12 @@ const upload = multer() // for parsing multipart/form-data
 
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(bodyParser.raw({ type: 'application/*', limit: 10000000 }))
+app.use(bodyParser.raw({ type: 'application/*', limit: 1024 * 1024 * 5 }))
+
 app.use('/upload', express.static(path.join(__dirname, 'upload')))
 
-app.post('/upload', upload.array(), (req, res, next) => {
-    const fileName = saveFile(req)
+app.post('/upload', upload.array(), async (req, res, next) => {
+    const fileName = await saveFile(req)
     res.json(JSON.stringify({ fileName }))
 })
 
